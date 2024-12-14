@@ -1,0 +1,141 @@
+/* styles.css */
+/* General Page Styling */
+body {
+  background-image: url('../images/db34d40b271fb59477621550bf73ea0b.jpg');
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color:#3a8de8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+
+  /* Login Container */
+  .login-container {
+    background: white;
+    border: 1px solid #dbdbdb;
+    border-radius: 1px;
+    width: 350px;
+    padding: 40px 40px 20px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-container img {
+    width: 175px;
+    margin-bottom: 20px;
+  }
+  
+  /* Input Fields */
+  input {
+    width: 100%;
+    padding: 9px 0;
+    margin: 8px 0;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
+    background-color: #fafafa;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  input:focus {
+    border-color: #a8a8a8;
+  }
+  
+  /* Login Button */
+  button {
+    background-color: #3897f0;
+    color: white;
+    padding: 10px 0;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #3077c8;
+  }
+  
+  /* OR Separator */
+  .separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    color: #8e8e8e;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  
+  .separator::before, .separator::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #dbdbdb;
+  }
+  
+  .separator::before {
+    margin-right: 18px;
+  }
+  
+  .separator::after {
+    margin-left: 18px;
+  }
+  
+  /* MetaMask Login Button */
+  #login-metamask {
+    background-color: #ffbb00;
+    color: black;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #login-metamask:hover {
+    background-color: #e6a700;
+  }
+  
+  /* Sign Up Text */
+  .signup {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #262626;
+  }
+  
+  a {
+    color: #3897f0;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Footer/Signup Link */
+  .footer-container {
+    margin-top: 15px;
+    font-size: 12px;
+    color: #8e8e8e;
+  }
+  
+  .footer-container a {
+    color: #262626;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .footer-container a:hover {
+    text-decoration: underline;
+  }
+  

@@ -1,0 +1,215 @@
+/* Ensure no padding or margin on the body */
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('../images/db34d40b271fb59477621550bf73ea0b.jpg'); /* Replace with your image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #fff;
+}
+
+/* Header and footer should be 100% width */
+header, footer {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Header styling */
+header {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(90deg, #3a8de8, #67b4f1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer styling */
+footer {
+    background-color: #3a8de8;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+/* Adjust the logo and buttons in the header */
+#first {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 40px;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+/* Styling for the "Hi" text */
+#first div {
+    font-size: 24px; /* Adjust text size */
+    color: white; /* Ensure text is visible */
+    font-weight: bold;
+}
+
+/* Search and login alignment and sizing */
+.search-and-login {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-and-login a {
+    color: white;
+    font-size: 24px;
+}
+
+.search-and-login button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Navigation Bar */
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    gap: 40px; 
+}
+
+nav a {
+    text-decoration: none;
+    font-size: 25px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #ffe333;
+}
+
+/* Main section */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8); /* Keeps text readable */
+    border-radius: 8px;
+    text-align: center;
+}
+
+.quiz-section {
+    max-width: 1200px;
+}
+
+.quiz-section h1 {
+    font-size: 64px;
+    font-weight: bold;
+    color: #000;
+    white-space: nowrap; /* Keeps the text in one line */
+    margin-top: -75px;
+}
+
+.quiz-section p {
+    font-size: 34px;
+    color: #555;
+    white-space: nowrap; /* Keeps the text in one line */
+    font-weight: bold;
+}
+
+/* Button styling */
+button {
+    padding: 10px 20px;
+    font-size: 14px;
+    width: 100px;
+    height: 40px;
+    cursor: pointer;
+    background-color: #ffe333;
+    border: none;
+    border-radius: 5px;
+    color: black;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.start-quiz-btn {
+    padding: 10px 20px;
+    font-size: 24px;
+    width: 200px;
+    height: 60px;
+    cursor: pointer;
+    background-color: #ffe333;
+    border: none;
+    border-radius: 5px;
+    color: black;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #ffac33;
+}
+
+/* Footer social icons */
+.social-icons a {
+    color: black; /* Default color set to black */
+    font-size: 24px;
+    margin: 0 10px;
+    transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.social-icons a:hover {
+    color: #ffcc00; /* Hover color set to #ffcc00 */
+}
+
+/* Footer content */
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.contact-us {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.contact-us:hover {
+    color: #ffe333;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    #first {
+        padding: 10px 20px;
+    }
+
+    .quiz-section h1 {
+        font-size: 36px;
+    }
+
+    .quiz-section p {
+        font-size: 18px;
+    }
+
+    nav ul {
+        gap: 20px;
+    }
+}
