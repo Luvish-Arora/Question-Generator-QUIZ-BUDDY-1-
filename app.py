@@ -129,9 +129,12 @@ class OptimizedQuizGenerator:
         return results
 
 
+import pandas as pd
+from typing import Dict, List
+
 def save_questions_to_excel(data: Dict[str, List[Dict[str, str]]], output_file: str = "generated_questions.xlsx"):
     """
-    Save generated questions to an Excel file.
+    Save generated questions to an Excel file by appending to existing content.
 
     Args:
         data: A dictionary with context as keys and lists of questions and difficulty levels as values.
@@ -142,12 +145,21 @@ def save_questions_to_excel(data: Dict[str, List[Dict[str, str]]], output_file: 
         for q_data in questions:
             rows.append({"Context": context, "Question": q_data["question"], "Difficulty": q_data["difficulty"]})
 
-    # Convert to DataFrame
-    df = pd.DataFrame(rows)
-    # Save to Excel
-    df.to_excel(output_file, index=False)
-    print(f"Questions saved to {output_file}")
+    # Convert new rows to DataFrame
+    new_df = pd.DataFrame(rows)
 
+    try:
+        # Read existing content if file exists
+        existing_df = pd.read_excel(output_file, engine="openpyxl")
+        # Concatenate existing and new data
+        combined_df = pd.concat([existing_df, new_df], ignore_index=True)
+    except FileNotFoundError:
+        # If file does not exist, use new data
+        combined_df = new_df
+
+    # Save combined DataFrame to Excel
+    combined_df.to_excel(output_file, index=False, engine="openpyxl")
+    print(f"Questions saved to {output_file}")
 
 def main():
     print("Initializing Quiz Generator...")
@@ -171,7 +183,7 @@ def main():
     # Save to Excel
     save_questions_to_excel(batch_results)
 
-
+main()
 # Generate and save questions to Excel
 @app.route('/generate-quiz')
 def generate_quiz():
