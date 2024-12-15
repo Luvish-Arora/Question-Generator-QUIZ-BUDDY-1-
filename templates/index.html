@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quizzing</title>
-    <script src="/script.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
@@ -12,11 +11,7 @@
     <header>
         <div id="first">
             <img src="../static/images/logo2.avif" alt="Quiz Logo" class="logo">
-            
-            <!-- Centered Text -->
-            <div style="color: black; font-size: xx-large; margin-left: 150px;">Leap , Learn & Lead!!!</div>
-            
-            <!-- Adjusted alignment and size of icons and login button -->
+            <div style="color: black;font-size: xx-large; margin-left: 150px;">Leap , Learn & Lead!!!</div>
             <div class="search-and-login">
                 <a href="#">
                     <i class="fas fa-search"></i>
@@ -40,14 +35,19 @@
     </header>
 
     <main>
-        <section class="quiz-section">
+        <section class="quiz-section" style="margin-bottom: -50px;">
             <h1>Test your knowledge</h1>
-            <p>How much do you know about sustainability? Test your knowledge with this short quiz.</p>
-            <a href="/quiz.html"><button class="start-quiz-btn">Start Quiz</button></a>
+        </section>
+
+        <section class="context-section">
+            <h1 style="color: #ffe333">Create Your Own Quiz</h1>
+            <h2 style="color: #ffe333">Enter a paragraph of text to generate questions from:</h2>
+            <textarea id="context-input" placeholder="Paste your text here..."></textarea>
+            <button id="generate-quiz-btn" class="generate-quiz-btn" style="width: 150px; height: 60px;">Uploading PDF</button>
+            <button id="generate-quiz-btn" class="generate-quiz-btn" style="width: 150px; height: 60px;">Generate Quiz</button>
         </section>
     </main>
 
-    <!-- Footer -->
     <footer id="footer">
         <div class="footer-content">
             <a href="mailto:support@example.com" class="contact-us">Contact Us</a>
@@ -61,5 +61,37 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        document.getElementById('generate-quiz-btn').addEventListener('click', function() {
+            const context = document.getElementById('context-input').value.trim();
+            
+            if (context === '') {
+                alert('Please enter a context paragraph.');
+                return;
+            }
+
+            // Send context to server via AJAX
+            fetch('/generate-custom-quiz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ context: context })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Redirect to quiz page
+                    window.location.href = '/quiz.html';
+                } else {
+                    alert('Failed to generate quiz. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+    </script>
 </body>
 </html>

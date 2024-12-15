@@ -1,13 +1,9 @@
-from flask import Flask, render_template, jsonify, redirect, url_for
+from flask import Flask, render_template, jsonify, redirect, url_for, request
 import torch
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 import pandas as pd
 import random
-import torch
-from transformers import T5ForConditionalGeneration, T5Tokenizer
 from typing import List, Dict, Optional
-import pandas as pd
-
 
 app = Flask(__name__)
 
@@ -51,17 +47,6 @@ class OptimizedQuizGenerator:
     ) -> List[str]:
         """
         Generate questions based on the given context and difficulty level.
-
-        Args:
-            context: Text to generate questions from
-            difficulty: Difficulty level ('easy', 'medium', 'hard')
-            num_questions: Number of questions to generate
-            max_length: Maximum length of generated questions
-            min_length: Minimum length of generated questions
-            temperature: Controls randomness (higher = more random)
-
-        Returns:
-            List of generated questions
         """
         input_text = self._prepare_input_text(context, difficulty)
 
@@ -84,7 +69,7 @@ class OptimizedQuizGenerator:
             max_length=max_length,
             min_length=min_length,
             num_return_sequences=num_questions,
-            num_beams=4,
+            num_beams=5,
             temperature=temperature,
             top_k=50,
             top_p=0.95,
@@ -97,7 +82,6 @@ class OptimizedQuizGenerator:
         questions = []
         for output in outputs:
             question = self.tokenizer.decode(output, skip_special_tokens=True)
-            # Remove any "generate question:" prefix if it appears in the output
             question = question.replace("generate question:", "").strip()
             questions.append(question)
 
@@ -128,17 +112,9 @@ class OptimizedQuizGenerator:
 
         return results
 
-
-import pandas as pd
-from typing import Dict, List
-
 def save_questions_to_excel(data: Dict[str, List[Dict[str, str]]], output_file: str = "generated_questions.xlsx"):
     """
     Save generated questions to an Excel file by appending to existing content.
-
-    Args:
-        data: A dictionary with context as keys and lists of questions and difficulty levels as values.
-        output_file: Name of the Excel file to save.
     """
     rows = []
     for context, questions in data.items():
@@ -161,63 +137,89 @@ def save_questions_to_excel(data: Dict[str, List[Dict[str, str]]], output_file: 
     combined_df.to_excel(output_file, index=False, engine="openpyxl")
     print(f"Questions saved to {output_file}")
 
-def main():
-    print("Initializing Quiz Generator...")
-    quiz_gen = OptimizedQuizGenerator()
+# Variable to track used questions
+used_questions = []
 
-    # Test batch generation
-    print("\nTesting batch generation...")
-    contexts = [
-        "Photosynthesis is the process by which plants convert sunlight into chemical energy, producing glucose and oxygen from carbon dioxide and water.",
-        "The Renaissance was a period of cultural rebirth in Europe from the 14th to 17th centuries, marked by renewed interest in classical art and learning."
-    ]
-    difficulties = ['easy', 'hard']
-
-    print("\nGenerating batch questions...")
-    batch_results = quiz_gen.batch_generate_questions(
-        contexts=contexts,
-        difficulties=difficulties,
-        questions_per_context=2
-    )
-
-    # Save to Excel
-    save_questions_to_excel(batch_results)
-
-main()
 # Generate and save questions to Excel
 @app.route('/generate-quiz')
 def generate_quiz():
     quiz_gen = OptimizedQuizGenerator()
     context = "Photosynthesis is the process by which plants convert sunlight into chemical energy."
     questions = quiz_gen.generate_question(context, "easy", num_questions=5)
-    quiz_gen.save_questions_to_excel(questions)
+    save_questions_to_excel({"Photosynthesis": [{"question": q, "difficulty": "easy"} for q in questions]})
     return redirect(url_for('quiz'))
+
+# Custom quiz generation route
+@app.route('/generate-custom-quiz', methods=['POST'])
+def generate_custom_quiz():
+    """
+    Generate a quiz from a user-provided context
+    """
+    data = request.get_json()
+    context = data.get('context', '').strip()
+    
+    if not context:
+        return jsonify({"error": "No context provided"}), 400
+    
+    # Initialize quiz generator
+    quiz_gen = OptimizedQuizGenerator()
+    
+    try:
+        # Generate questions for the custom context
+        batch_results = quiz_gen.batch_generate_questions(
+            contexts=[context],
+            difficulties=['medium'],
+            questions_per_context=5
+        )
+        
+        # Save questions to Excel
+        save_questions_to_excel(batch_results)
+        
+        return jsonify({"status": "success"}), 200
+    
+    except Exception as e:
+        print(f"Error generating quiz: {e}")
+        return jsonify({"error": "Failed to generate quiz"}), 500
 
 # Serve a random question from the Excel file
 @app.route('/get-random-question')
 def get_random_question():
     df = pd.read_excel("generated_questions.xlsx")
-    random_question = df.sample().iloc[0]
+    
+    # Filter out the questions already used
+    unused_questions = df[~df['Question'].isin(used_questions)]
+    
+    if unused_questions.empty:
+        return jsonify({"message": "Quiz completed!"}), 200
+    
+    random_question = unused_questions.sample().iloc[0]
+    used_questions.append(random_question['Question'])
     return jsonify({"question": random_question['Question']})
 
+# Route to handle quiz completion
+@app.route('/quiz-completed')
+def quiz_completed():
+    return redirect(url_for('index1'))
+
+# Root route
 @app.route("/")
 def index():
     return render_template('index.html')
 
+# Other routes for different pages
 @app.route("/login.html")
 def login():
     return render_template('login.html')
 
 @app.route("/index.html")
-def index3():
+def index_html():
     return render_template('index.html')
-# Render index1.html
-@app.route('/index1.html')
+
+@app.route("/index1.html")
 def index1():
     return render_template('index1.html')
 
-# Render quiz.html
-@app.route('/quiz.html')
+@app.route("/quiz.html")
 def quiz():
     return render_template('quiz.html')
 

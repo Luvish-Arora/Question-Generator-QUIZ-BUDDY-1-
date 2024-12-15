@@ -90,7 +90,6 @@
                 let minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
                 let seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
 
-                // Add leading zeroes
                 hours = (hours < 10) ? '0' + hours : hours;
                 minutes = (minutes < 10) ? '0' + minutes : minutes;
                 seconds = (seconds < 10) ? '0' + seconds : seconds;
@@ -105,10 +104,12 @@
             fetch('/get-random-question')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('question').innerText = data.question;
-                    // You can also set options dynamically if required
-                    // document.getElementById('option1').innerText = data.option1;
-                    // document.getElementById('option2').innerText = data.option2;
+                    if (data.message) {
+                        alert(data.message);
+                        window.location.href = "/index1.html";  // Redirect to index1.html when quiz is completed
+                    } else {
+                        document.getElementById('question').innerText = data.question;
+                    }
                 });
 
             startStopwatch();
@@ -116,7 +117,8 @@
 
         // Handle quiz form submission
         document.getElementById('quiz-form').addEventListener('submit', function(event) {
-            window.location.href = "/get-random-question";
+            event.preventDefault();
+            window.location.reload();  // Reload the page to fetch next question
         });
     </script>
 </body>
