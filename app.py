@@ -114,7 +114,7 @@ class OptimizedQuizGenerator:
 
 def save_questions_to_excel(data: Dict[str, List[Dict[str, str]]], output_file: str = "generated_questions.xlsx"):
     """
-    Save generated questions to an Excel file by appending to existing content.
+    Save generated questions to an Excel file by overwriting any existing content.
     """
     rows = []
     for context, questions in data.items():
@@ -124,18 +124,10 @@ def save_questions_to_excel(data: Dict[str, List[Dict[str, str]]], output_file: 
     # Convert new rows to DataFrame
     new_df = pd.DataFrame(rows)
 
-    try:
-        # Read existing content if file exists
-        existing_df = pd.read_excel(output_file, engine="openpyxl")
-        # Concatenate existing and new data
-        combined_df = pd.concat([existing_df, new_df], ignore_index=True)
-    except FileNotFoundError:
-        # If file does not exist, use new data
-        combined_df = new_df
-
-    # Save combined DataFrame to Excel
-    combined_df.to_excel(output_file, index=False, engine="openpyxl")
+    # Overwrite the existing file with new data
+    new_df.to_excel(output_file, index=False, engine="openpyxl")
     print(f"Questions saved to {output_file}")
+
 
 # Variable to track used questions
 used_questions = []
